@@ -1,7 +1,4 @@
-﻿I checked this implementation of ChatApplication agains ChatGPT for fun. According to ChatGPT this implementation 
-  of Cancellation is the best. It can be confusing to use both a bool variable for cancellation like 
-  ProgramIsRunning and CancellationToken and it is unnecessary, so stick with one approach and if you allready are
-  using a Task using CTS.Cancel() is the cleanest approach anyway, so just use that. And it's easy to use.  
+﻿I checked this new implementation of the previous ChatApplication agains ChatGPT for fun. According to ChatGPT this implementation now is better and the goal was to get a decent flow for a chatapplication, that are easy to read, extend, and test. the last version was testable, but the separation of processing the input and rendering the ui before sending and writing was not really separated, when using console ui (used just for practise) and that should now be fixed. But, to make it testable there are still some small changes needed, for instance the UIRenderer shoud have an interface.  
 
   ChatGPT: 
 
