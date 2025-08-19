@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="ChatBasicApp">
+      <HintPath>..\ChatBasicApp\ChatBasicApp\bin\Debug\net5.0\ChatBasicApp.dll</HintPath>
+    </Reference>
+    <Reference Include="ChatUIManualTest">
+      <HintPath>..\ChatUIManualTest\ChatUIManualTest\bin\Debug\net5.0\ChatUIManualTest.dll</HintPath>
+    </Reference>
+    <Reference Include="ModularChatPeer">
+      <HintPath>bin\Debug\net5.0\ModularChatPeer.dll</HintPath>
+    </Reference>
+    <Reference Include="NetworkServer">
+      <HintPath>..\NetworkServer\NetworkServer\bin\Debug\net5.0\NetworkServer.dll</HintPath>
+    </Reference>
+    <Reference Include="SimpleUI">
+      <HintPath>bin\Debug\net5.0\SimpleUI.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
