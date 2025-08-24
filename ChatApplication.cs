@@ -25,22 +25,22 @@ namespace ChatModularApp
 
         private readonly IinputProcessor _inputProcessor; //change IInputProcessor to use with SimpleUI.InputProcessor
 
-        private readonly ConsoleUIRenderer _consoleRenderer;
+        private readonly IUIRenderer _consoleRenderer;
         public Action<string> MessageAction {get; set;} //TODO not needed less flexible compared to IUI
 
         private readonly IModularChatPeer _chatPeer;
 
         private IUI _ui;
 
-        public ChatApplication(IModularChatPeer chatPeer, IinputProcessor inputProcessor, IUI ui, ConsoleUIRenderer uIRenderer)
+        public ChatApplication(IModularChatPeer chatPeer, IinputProcessor inputProcessor, IUI ui, IUIRenderer uIRenderer)
         {
             _chatPeer = chatPeer;
-            MessageAction = (m) => _ui.Output(m, NetworkServer.MessageType.General);
+            //MessageAction = (m) => _ui.Output(m, NetworkServer.MessageType.General);
             _ui = ui;
             _inputProcessor = inputProcessor;
             _inputProcessor.WriteBuffer = messageBuffer;
-            ConsoleUIRenderer.WriteBuffer = messageBuffer;
             _consoleRenderer = uIRenderer;
+           
         }
 
         public async Task Run(string[] args)
@@ -107,23 +107,23 @@ namespace ChatModularApp
                     //ConsoleInputProcessor visually updates the console window and executes commands and then returns a result including a message , that can be sent by network peer etc. thus ui and network peer message sending is kept separate from input processing.   
                     SimpleUI.ConsoleInputProcessor.CTS = cTS;
 
-                    SimpleUI.InputProcessingResult result = _inputProcessor.ProcessInput(key);  //Proccess commands like quit internally and quits using global cancellationtoken
+                    SimpleUI.InputProcessingResult inputprocessingresult = _inputProcessor.ProcessInput(key);  //Proccess commands like quit internally and quits using global cancellationtoken
 
-                    if (result.UICommand == UICommand.Exit)
+                    if (inputprocessingresult.UICommand == UICommand.Exit)
                     {
                         cTS.Cancel();
 
                     }
-                    if (result.isRenderCommand && _ui is ChatUIManualTest.ConsoleUI) 
+                    if (inputprocessingresult.isRenderCommand && _ui is ChatUIManualTest.ConsoleUI) 
                     {
-                        _consoleRenderer.Render(result); //Eller override ToString() i InputProcessingResult
+                        _consoleRenderer.Render(inputprocessingresult); //Eller override ToString() i InputProcessingResult
                     }
 
-                    if (result.UIAction == UIAction.Send || result.UIAction == UIAction.Write) //false = antingen writing eller command. obs processing sker ovan tex. spara i buffer, och kolla andra kommandon och rendering kommandon som t.ex. space. improve way of keeping ChatPeer separate
+                    if (inputprocessingresult.UIAction == UIAction.Send || inputprocessingresult.UIAction == UIAction.Write) //false = antingen writing eller command. obs processing sker ovan tex. spara i buffer, och kolla andra kommandon och rendering kommandon som t.ex. space. improve way of keeping ChatPeer separate
                     {
                         try
                         {
-                            await _chatPeer.SendMessageAsync(result.MessageToSend); 
+                            await _chatPeer.SendMessageAsync(inputprocessingresult.MessageToSend); 
 
                         }
                         catch (SocketException e)

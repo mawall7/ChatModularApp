@@ -7,10 +7,16 @@ using System.Threading.Tasks;
 
 namespace ChatModularApp
 {
-    public class ConsoleUIRenderer
+    public class ConsoleUIRenderer : IUIRenderer
     {
-        public static StringBuilder WriteBuffer { get; set; }
-        public void Render(InputProcessingResult processingResult)
+        private StringBuilder _writeBuffer;
+
+        public ConsoleUIRenderer(StringBuilder writeBuffer)
+        {
+            _writeBuffer = writeBuffer;
+        }
+        
+        public void Render(IInputProcessingResult processingResult)
         {
             var CursorPos = Console.GetCursorPosition();
 
@@ -31,7 +37,7 @@ namespace ChatModularApp
                 Console.SetCursorPosition(CursorPos.Left + 1, CursorPos.Top);
                 CursorPos = Console.GetCursorPosition();
                 ClearLine();
-                Console.Write(WriteBuffer.ToString());
+                Console.Write(_writeBuffer.ToString());
                 Console.SetCursorPosition(CursorPos.Left, CursorPos.Top);
                 
             }
@@ -39,9 +45,9 @@ namespace ChatModularApp
             {
                 if (Console.GetCursorPosition().Left >= 1) //0 is min left position
                 {
-                    WriteBuffer = WriteBuffer.Remove(CursorPos.Left - 1, 1);
+                    _writeBuffer = _writeBuffer.Remove(CursorPos.Left - 1, 1);
                     ClearLine();
-                    Console.Write(WriteBuffer.ToString());
+                    Console.Write(_writeBuffer.ToString());
                     Console.SetCursorPosition(CursorPos.Left - 1, CursorPos.Top);
                 }
             }
